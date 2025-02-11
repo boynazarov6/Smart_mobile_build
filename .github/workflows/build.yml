@@ -27,7 +27,7 @@ jobs:
 
     # iOS yaratish
     - name: Set up Xcode
-      uses: maxheld83/setup-xcode@v2
+      uses: apple-actions/setup-xcode@v3
       with:
         xcode-version: '12.5'
 
@@ -38,14 +38,14 @@ jobs:
 
     # APK faylini yuklash
     - name: Upload APK to storage
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: android-apk
         path: android/app/build/outputs/flutter-apk/app-release.apk
 
     # iOS arxivini yuklash
     - name: Upload iOS archive to storage
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ios-archive
         path: ios/build/YourApp.xcarchive
