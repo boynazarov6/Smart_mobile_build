@@ -3,49 +3,51 @@ name: Build and Deploy
 on:
   push:
     branches:
-      - main  # Asosiy branchga push qilinganida
+      - main  # Trigger on push to the main branch
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # Ubuntu operatsion tizimida ishlash
+    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
 
     steps:
-    # Repozitoriyadan kodni olish
+    # Checkout the code
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    # Android APK yaratish
+    # Set up JDK for Android
     - name: Set up JDK 11
       uses: actions/setup-java@v2
       with:
         java-version: '11'
 
+    # Build Android APK
     - name: Build APK
       run: |
         cd android
         ./gradlew build --stacktrace
 
-    # iOS yaratish
+    # Set up Xcode for iOS build
     - name: Set up Xcode
-      uses: apple-actions/setup-xcode@v3
+      uses: apple-actions/setup-xcode@v2
       with:
-        xcode-version: '12.5'
+        xcode-version: '12.5'  # Specify the Xcode version (can change as per your project)
 
+    # Build iOS
     - name: Build iOS
       run: |
         cd ios
         xcodebuild -workspace YourApp.xcworkspace -scheme YourApp -sdk iphoneos -configuration AppStoreDistribution clean archive -archivePath $PWD/build/YourApp.xcarchive
 
-    # APK faylini yuklash
+    # Upload Android APK to storage
     - name: Upload APK to storage
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v2
       with:
         name: android-apk
         path: android/app/build/outputs/flutter-apk/app-release.apk
 
-    # iOS arxivini yuklash
+    # Upload iOS archive to storage
     - name: Upload iOS archive to storage
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v2
       with:
         name: ios-archive
         path: ios/build/YourApp.xcarchive
